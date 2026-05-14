@@ -58,46 +58,56 @@ The Iron Nexus manages the complete lifecycle of a railway environment:
 ## File Structure
 
 ```
-24I-2541_24I-0527_24I-0746_Group26/
-├── 26/
-|   ├── Makefile              — Build with make (requires MinGW)
-|	└── README.md             — This file
-│   ├── main.cpp          — Entry point, all menus
-│   ├── Train.cpp / .h    — AVL tree train registry
-│   ├── Coach.cpp / .h    — Doubly linked list coach management
-│   ├── Seat.cpp / .h     — Hash table + BST seat management
-│   ├── Network.cpp / .h  — Adjacency list graph + Dijkstra
-│   ├── Logger.cpp / .h   — Linked-list stack operation log
-│   ├── UndoRedo.cpp / .h — Two-stack undo/redo manager
-│   ├── FIleIO.cpp / .h   — File persistence (save/load)
-│   └── Utils.cpp / .h    — Colors, ASCII art, input helpers
-├── 26.pdf            — Original project report (PDF)
-├── 26.exe         — Pre-compiled executable (double-click to run)
-
+.
+├── DS Project/
+│   ├── Coach.cpp
+│   ├── Coach.h
+│   ├── FileIO.cpp
+│   ├── FileIO.h
+│   ├── Logger.cpp
+│   ├── Logger.h
+│   ├── Makefile
+│   ├── main.cpp
+│   ├── Network.cpp
+│   ├── Network.h
+│   ├── Seat.cpp
+│   ├── Seat.h
+│   ├── Train.cpp
+│   ├── Train.h
+│   ├── UndoRedo.cpp
+│   ├── UndoRedo.h
+│   ├── Utils.cpp
+│   └── Utils.h
+├── .gitignore
+├── README.md
+├── Report.pdf
 ```
+
+**Main source code** is under [`DS Project/`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/tree/main/DS%20Project).  
+- Each module is split into `.cpp` and `.h` files.
+- [`Makefile`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/DS%20Project/Makefile) builds the project with `make`.
+
+Other top-level files:
+- [`README.md`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/README.md): This file.
+- [`Report.pdf`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/Report.pdf): Original project report.
+- [`.gitignore`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/.gitignore): Git ignore rules.
 
 ---
 
 ## Running the Application
 
-### Option 1 — Pre-built executable (just double-click)
-```
-IronNexus.exe
-```
-Already compiled and sitting in the project root. No setup needed.
-
-### Option 2 — Visual Studio (rebuild from source)
-Open `DS Project\DS Project.vcxproj` in Visual Studio 2022 and press **Ctrl+F5**.
-
-### Option 3 — Makefile (requires MinGW g++ in PATH)
+### Option 1 — Makefile (requires MinGW g++ in PATH)
 ```
 make
 ./IronNexus.exe
 ```
 
-### Option 4 — Manual g++ command (requires MinGW g++ in PATH)
+### Option 2 — Visual Studio (rebuild from source)
+Open `DS Project\DS Project.vcxproj` in Visual Studio 2022 and press **Ctrl+F5**.
+
+### Option 3 — Manual g++ command (requires MinGW g++ in PATH)
 ```
-g++ -std=c++17 -Wall -O2 -o IronNexus.exe "DS Project/main.cpp" "DS Project/Utils.cpp" "DS Project/Train.cpp" "DS Project/Coach.cpp" "DS Project/Seat.cpp" "DS Project/Network.cpp" "DS Project/Logger.cpp" "DS Project/UndoRedo.cpp" "DS Project/FIleIO.cpp"
+g++ -std=c++17 -Wall -O2 -o IronNexus.exe "DS Project/main.cpp" "DS Project/Utils.cpp" "DS Project/Train.cpp" "DS Project/Coach.cpp" "DS Project/Seat.cpp" "DS Project/Network.cpp" "DS Project/Logger.cpp" "DS Project/UndoRedo.cpp" "DS Project/FileIO.cpp" -o IronNexus.exe
 ```
 
 ---
