@@ -11,3 +11,7 @@ x64/
 *.iobj
 *.ipdb
 *.dat
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.slnx
