@@ -1,135 +1,111 @@
-# The Iron Nexus — Real-Time Railway Management System
+<div align="center">
 
-A comprehensive command-line railway management system built entirely from scratch in C++ with no STL containers.
+# Iron Nexus
 
----
+Command-line railway management system in C++ where every data structure is written from scratch.
 
-## Group Members
+![C++](https://img.shields.io/badge/C%2B%2B-17-00599C?style=flat-square&logo=cplusplus&logoColor=white)
+![Compiler](https://img.shields.io/badge/Compiler-g%2B%2B-A42E2B?style=flat-square&logo=gnu&logoColor=white)
+![STL containers](https://img.shields.io/badge/STL%20containers-none-2E7D32?style=flat-square)
+![Interface](https://img.shields.io/badge/Interface-CLI-4D4D4D?style=flat-square&logo=windowsterminal&logoColor=white)
 
-| Name           | Roll No.  | Section |
-|----------------|-----------|---------|
-| Shahram Shafiq | 24i-2541  | B       |
-| Haris Said     | 24i-0527  | B       |
-| Haris Shafiq   | 24i-0746  | B       |
+</div>
 
----
+## Overview
 
-## Project Overview
+Iron Nexus manages the day-to-day data of a small railway: registered trains, the coaches coupled to each train, the station network between cities, and seat bookings. Instead of using `std::vector`, `std::map` or other library containers, it implements an AVL tree, doubly linked list, adjacency-list graph, hash table, BST and stacks by hand with raw pointers and manual `new`/`delete`. Everything is driven from a colored, menu-based console interface, and all data can be saved to and restored from plain-text files. It was built together with teammates Haris Said and Haris Shafiq.
 
-The Iron Nexus manages the complete lifecycle of a railway environment:
-- Train registration and lookup via a self-balancing AVL tree
-- Coach composition management using a doubly linked list
-- Station network routing with Dijkstra's shortest path
-- Seat booking using a dual-layer Hash Table + BST system
-- Full operation logging using a LIFO stack
-- Undo/Redo with the two-stack pattern
-- Persistent save/load for all modules
+## Key Features
 
----
+- **Train registry**: an AVL tree keyed by train ID with insert, remove, search, in-order, pre-order and post-order display, and a per-train detail view.
+- **Coach management**: a doubly linked list per train. Add a coach at the front, at the back or at a position (the walk starts from whichever end is nearer), remove by ID, traverse forward or backward, and reverse the train orientation.
+- **Station network**: a weighted undirected graph stored as an adjacency list (up to 15 stations). Dijkstra finds the shortest path by distance (km) or by travel time (min), a breadth-first search checks connectivity, and the network can be shown as a list or an adjacency matrix.
+- **Seat booking**: a hash table with linear probing and a prime-sized table gives fast booking, cancellation and lookup, while a BST kept in sync gives sorted, booked-only and available-only displays.
+- **Operation log**: a linked-list stack of timestamped entries that can be viewed in full, limited to the most recent N, filtered by module, peeked or popped.
+- **Undo and redo**: a two-stack design covering 13 action types across trains, coaches, seat bookings, stations and routes. A new action clears the redo stack.
+- **File persistence**: save and load the train registry (including coaches and seat charts), the network and the log, individually or all at once. Trains are written in pre-order so the AVL tree rebuilds cleanly on load, and the seat BST can also be exported as a hierarchical structure file.
+- **Terminal UI**: ANSI colors, a box-drawn banner and menu frames, with Windows virtual-terminal mode switched on at startup.
 
-## Modules and Data Structures
+## Tech Stack
 
-| Module              | Data Structure      | Justification |
-|---------------------|---------------------|---------------|
-| Train Registry      | AVL Tree            | O(log n) insert/delete/search; self-balancing prevents worst-case O(n) |
-| Coach Management    | Doubly Linked List  | O(1) front/back insert; bidirectional traversal; in-place reversal |
-| Railway Network     | Adjacency List + Dijkstra | Sparse graph — matrix wastes memory; Dijkstra gives optimal path |
-| Seating (Layer 1)   | Hash Table (Linear Probing) | O(1) average booking/lookup/cancellation |
-| Seating (Layer 2)   | Binary Search Tree  | Ordered in-order traversal for sorted seat display |
-| Operation Log       | Linked-List Stack   | LIFO — most recent events shown first; O(1) push/pop |
-| Undo / Redo         | Two Stacks          | Standard pattern; clear redo on new action |
+| Area | Technology |
+|------|------------|
+| Language | C++17 |
+| Data structures | AVL tree, BST, doubly linked list, singly linked stacks, adjacency list, hash table (all hand-written) |
+| Algorithms | Dijkstra shortest path, breadth-first search, tree traversals, linear probing |
+| Build | GNU Make or a direct `g++` command |
+| Storage | Plain-text `.dat` files under `data/` |
+| Interface | Console menus with ANSI escape codes |
 
----
+## Project Structure
 
-## Features
-
-- **Train Registry**: Insert, remove, search, and display trains (in-order, pre-order, post-order AVL traversal)
-- **Coach Management**: Attach at front/back/position; remove by ID; forward/backward traversal; reverse orientation
-- **Network**: Add/remove stations and routes; Dijkstra shortest path by distance or travel time; connectivity check; adjacency matrix view
-- **Seat Management**: Hash table for O(1) booking; BST for sorted display; dual sync on every operation
-- **Operation Log**: Push/pop/peek; filter by module; view recent N entries
-- **Undo/Redo** *(Bonus)*: Full action reversal for all modules using two linked-list stacks
-- **File I/O**: Save and load each module independently or all at once; hierarchical BST structure file *(Bonus)*
-- **Colored Terminal Output** *(Bonus)*: Full ANSI color with Windows VT processing enabled
-- **Novel Optimizations** *(Bonus)*: Half-traversal coach insertion; prime-sized hash table; pre-order AVL save for faithful restore
-
----
-
-## File Structure
-
-```
+```text
 .
-├── DS Project/
-│   ├── Coach.cpp
-│   ├── Coach.h
-│   ├── FileIO.cpp
-│   ├── FileIO.h
-│   ├── Logger.cpp
-│   ├── Logger.h
-│   ├── Makefile
-│   ├── main.cpp
-│   ├── Network.cpp
-│   ├── Network.h
-│   ├── Seat.cpp
-│   ├── Seat.h
-│   ├── Train.cpp
-│   ├── Train.h
-│   ├── UndoRedo.cpp
-│   ├── UndoRedo.h
-│   ├── Utils.cpp
-│   └── Utils.h
-├── .gitignore
-├── README.md
-├── Report.pdf
+|-- DS Project/
+|   |-- main.cpp       # Entry point and all menus
+|   |-- Train.*        # AVL tree train registry
+|   |-- Coach.*        # Doubly linked list of coaches
+|   |-- Network.*      # Station graph, Dijkstra, BFS
+|   |-- Seat.*         # Hash table + BST seat chart
+|   |-- Logger.*       # Linked-list stack operation log
+|   |-- UndoRedo.*     # Two-stack undo and redo
+|   |-- FileIO.*       # Save and load to text files
+|   |-- Utils.*        # Colors, banner, string and input helpers
+|   `-- Makefile       # Build rules
+|-- .gitignore
+`-- README.md
 ```
 
-**Main source code** is under [`DS Project/`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/tree/main/DS%20Project).  
-- Each module is split into `.cpp` and `.h` files.
-- [`Makefile`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/DS%20Project/Makefile) builds the project with `make`.
+## Getting Started
 
-Other top-level files:
-- [`README.md`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/README.md): This file.
-- [`Report.pdf`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/Report.pdf): Original project report.
-- [`.gitignore`](https://github.com/shahramshafiq/Railway-Management-System-using-Data-Structures/blob/main/.gitignore): Git ignore rules.
+### Prerequisites
 
----
+- A C++17 compiler: `g++` (MinGW-w64 on Windows, GCC or Clang elsewhere)
+- GNU Make (optional, only for the Makefile route)
 
-## Running the Application
+### Installation
 
-### Option 1 — Makefile (requires MinGW g++ in PATH)
+```bash
+git clone https://github.com/shahramshafiq/railway-management-system.git
+cd railway-management-system
 ```
+
+### Run
+
+Build with Make from the repository root:
+
+```bash
 make
 ./IronNexus.exe
 ```
 
-### Option 2 — Visual Studio (rebuild from source)
-Open `DS Project\DS Project.vcxproj` in Visual Studio 2022 and press **Ctrl+F5**.
+Or compile directly with `g++`:
 
-### Option 3 — Manual g++ command (requires MinGW g++ in PATH)
+```bash
+g++ -std=c++17 -Wall -Wextra -O2 -o IronNexus.exe "DS Project/main.cpp" "DS Project/Utils.cpp" "DS Project/Train.cpp" "DS Project/Coach.cpp" "DS Project/Seat.cpp" "DS Project/Network.cpp" "DS Project/Logger.cpp" "DS Project/UndoRedo.cpp" "DS Project/FileIO.cpp"
+./IronNexus.exe
 ```
-g++ -std=c++17 -Wall -O2 -o IronNexus.exe "DS Project/main.cpp" "DS Project/Utils.cpp" "DS Project/Train.cpp" "DS Project/Coach.cpp" "DS Project/Seat.cpp" "DS Project/Network.cpp" "DS Project/Logger.cpp" "DS Project/UndoRedo.cpp" "DS Project/FileIO.cpp" -o IronNexus.exe
-```
 
----
+Run it from the repository root: the program creates a `data/` folder in the current directory the first time you save. The program reads no environment variables.
 
-## Runtime Notes
+## Usage
 
-- A `data/` directory is created automatically on first save
-- Save files are plain-text and human-readable
-- BST structure is saved in hierarchical pre-order format (Bonus)
-- ANSI colors require Windows 10 v1511+ or any modern Linux/macOS terminal
+The main menu opens seven areas: Train Registry, Coach Management, Railway Track Network, Seating Chart, Operation Log, Undo / Redo and Save / Load Data. A typical session:
 
----
+1. **Train Registry**: register a train with a positive numeric ID and a name.
+2. **Coach Management**: add coaches to it (type Economy, Business or VIP, plus a seat count).
+3. **Railway Track Network**: add stations, connect them with routes (distance and travel time), then run the shortest path by distance or by time.
+4. **Seating Chart**: initialize the chart for the train, then book and cancel seats by seat number and passenger name.
+5. **Undo / Redo**: step back or forward through those changes.
+6. **Save / Load Data**: write everything to `data/trains.dat`, `data/network.dat` and `data/log.dat`, or save the seat BST structure to `data/bst_structure.dat`.
 
-## Engineering Constraints
+## Limitations and Roadmap
 
-- **No STL**: No `vector`, `list`, `stack`, `queue`, `map`, or any pre-built container
-- **Raw pointers**: All dynamic memory managed manually with `new`/`delete`
-- **No advanced syntax**: No walrus operator, range-for, or complex unpacking
-- **Crash-proof**: Full input validation, null checks, and edge-case handling throughout
+- The network holds at most 15 stations, set by the `MAX_STATIONS` constant in `Network.h`.
+- Undo and redo history lives in memory only and is not written to the data files.
+- Screen clearing and creation of the `data/` folder shell out through `system()`, with Windows handled first and a Unix fallback.
+- There are no automated tests yet; adding unit tests for each data structure is the natural next step.
 
----
+## Author
 
-## Academic Integrity
-
-Each group implemented their own independent solution. Code is original.
+**Shahram Shafiq** - [GitHub](https://github.com/shahramshafiq) | [LinkedIn](https://www.linkedin.com/in/shahramshafiq/)
